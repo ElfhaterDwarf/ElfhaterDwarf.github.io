@@ -3,10 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Великолепый слон из мха</title>
+    <style>
+body{
+    background-image: url(slonizmha.png);
+            color:green;
+            background-size: 35px;
+            animation: anim1 1.2s;
+        }
+body img{
+    animation: rotate 20s linear infinite;
+    background-position: center;
+
+}
+h3{
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color:yellow;
+    font-size: 35px;
+    
+}
+h4{
+font-family: 'Times New Roman', Times, serif;
+color: chocolate;
+font-size: 15px;
+
+}
+
+@keyframes anim1{
+    0%{opacity: 0;transform: scale(10, 0.1);rotate: 0.5turn;transform: perspective(500px);}
+    100%{opacity: 1;transform: scale(1, 1);rotate: 1turn;transform: perspective(100px);}
+}
+
+@keyframes anim2{
+    0%{opacity: 1;transform: scale(1.2, 0.1);rotate: 0.5turn;transform: perspective(50px);}
+    100%{opacity: 1;transform: scale(1, 1);rotate: 1turn;transform: perspective(100px);}
+}
+    </style>
 </head>
 <body>
-    Сайт студента Сухова Михаила Сергеевича гр.3239
-    <a href="23oct24.html"> 23 октября 2024</a>
+    <h4>Сайт студента Сухова Михаила Сергеевича гр.3239</h4>
+    <a href="23oct24.html"> <h3>23 октября 2024</h3> </a> <br>
+    <a href="24oct24.html"> <h3>24 октября 2024</h3> </a> <br>
+    <a href="volosiki.html"> <h3>Волосики хтмл</h3> </a> <br>
 </body>
+
+
+
 </html>
