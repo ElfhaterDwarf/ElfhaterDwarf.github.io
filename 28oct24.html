@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лоботомия</title>
+    <style>
+        body img{
+            width: 1000px;
+            height: 800px;
+        }
+        body{
+            background-image: url(slonizmha.png);
+            color:green;
+            
+        }
+        h1{
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: small;
+        }
+        h2{
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 35px;
+            color:yellowgreen;
+            font-weight: bolder;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html"> <h2>СЛОН ИЗ МХА </h2> </a> <br>
+</body>
+<script>
+let zondri = document.createElement('img');
+zondri.src = 'zondri.gif';
+document.body.append(zondri);
+
+let left = 450;
+let step = -5;
+zondri.style.position = 'fixed';
+zondri.style.top = '100px';
+zondri.style.left = left +'px';
+
+function moveZondri(){
+    left = left + step;
+    zondri.style.left = left + 'px';
+    if(left<-800){
+        step = step*(-1);
+        zondri.style.transform = 'rotateY(180deg)'
+    }
+    if(left>1600){
+        step = step*(-1);
+        zondri.style.transform = 'rotateY(360deg)'
+    }
+}
+
+setInterval(moveZondri, 25)
+</script>
+</html>

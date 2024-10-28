@@ -14,6 +14,8 @@ body{
 body img{
     animation: rotate 20s linear infinite;
     background-position: center;
+    width: 100px;
+    height: 80px;
 
 }
 h3{
@@ -45,8 +47,18 @@ font-size: 15px;
     <a href="23oct24.html"> <h3>23 октября 2024</h3> </a> <br>
     <a href="24oct24.html"> <h3>24 октября 2024</h3> </a> <br>
     <a href="volosiki.html"> <h3>Волосики хтмл</h3> </a> <br>
+    <a href="28oct24.html"> <h3>28 октября 2024</h3> </a> <br>
 </body>
+<script>
+    let specialist = document.createElement('img');
+specialist.src = 'specialist.gif';
+document.body.append(specialist);
 
+let left = 1815;
+specialist.style.position = 'fixed';
+specialist.style.top = '880px';
+specialist.style.left = left +'px';
+</script>
 
 
 </html>
