@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Битва персонажей</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        #battleArea {
+            display: none;
+            margin-top: 20px;
+        }
+        .character {
+            display: inline-block;
+            margin: 20px;
+            padding: 10px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+        .selected {
+            background-color: #e0e0ff;
+            border-color: #000;
+        }
+        .highlight {
+            color: #ff0000;
+            font-weight: bold;
+        }
+        .health {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .attack-button {
+            margin-top: 20px;
+            display: none;
+        }
+        #roundCounter {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Добро пожаловать в битву персонажей!</h1>
+    <button id="startButton">Начать битву</button>
+    <div id="battleArea">
+        <div id="roundCounter">Раунд: 0</div>
+        <div id="playerCharacters">
+            <h3>Персонажи игрока</h3>
+            <div class="character" id="hero1">
+                <h4>Персонаж 1 (Скорость: <span id="hero1Speed">0</span>) <span class="highlight" id="highlightHero1"></span></h4>
+                <div class="health">Здоровье: <span id="hero1Health">100</span></div>
+            </div>
+            <div class="character" id="hero2">
+                <h4>Персонаж 2 (Скорость: <span id="hero2Speed">0</span>) <span class="highlight" id="highlightHero2"></span></h4>
+                <div class="health">Здоровье: <span id="hero2Health">100</span></div>
+            </div>
+            <div class="character" id="hero3">
+                <h4>Персонаж 3 (Скорость: <span id="hero3Speed">0</span>) <span class="highlight" id="highlightHero3"></span></h4>
+                <div class="health">Здоровье: <span id="hero3Health">100</span></div>
+            </div>
+        </div>
+        <div id="enemyCharacters">
+            <h3>Персонажи противника</h3>
+            <div class="character" id="enemy1">
+                <h4>Противник 1 (Скорость: <span id="enemy1Speed">0</span>) <span class="highlight" id="highlightEnemy1"></span></h4>
+                <div class="health">Здоровье: <span id="enemy1Health">100</span></div>
+            </div>
+            <div class="character" id="enemy2">
+                <h4>Противник 2 (Скорость: <span id="enemy2Speed">0</span>) <span class="highlight" id="highlightEnemy2"></span></h4>
+                <div class="health">Здоровье: <span id="enemy2Health">100</span></div>
+            </div>
+            <div class="character" id="enemy3">
+                <h4>Противник 3 (Скорость: <span id="enemy3Speed">0</span>) <span class="highlight" id="highlightEnemy3"></span></h4>
+                <div class="health">Здоровье: <span id="enemy3Health">100</span></div>
+            </div>
+        </div>
+        <button class="attack-button" id="attackButton" onclick="attack()">Атаковать</button>
+        <button class="attack-button" id="provokeButton">Провоцировать</button>
+        <button class="attack-button" id="prepareButton">Подготовить атаку</button>
+    </div>
+    <script>
+        const startButton = document.getElementById('startButton');
+        const battleArea = document.getElementById('battleArea');
+        let selectedTarget = null;
+        let turnOrder = [];
+        let currentTurnIndex = 0;
+        let round = 0;
+
+        const enemyNames = ["Бандит", "Собака", "Гуль", "Анимешник", "Злодей Бо Синн", "Битардик", "Спанч Боб"];
+        const playerPrefixes = ["Герой", "Воин", "Маг", "Убийца", "Стрелок", "Танк"];
+
+        startButton.addEventListener('click', function() {
+            startButton.style.display = 'none'; // Скрываем кнопку
+            battleArea.style.display = 'block'; // Показываем область битвы
+            initializeCharacters(); // Инициализация персонажей
+            calculateTurnOrder(); // Рассчитываем порядок ходов
+            highlightCurrentTurn(); // Подсвечиваем текущего персонажа
+        });
+
+        function getRandomName() {
+            return playerPrefixes[Math.floor(Math.random() * playerPrefixes.length)] + " " + Math.floor(Math.random() * 100);
+        }
+
+        function initializeCharacters() {
+            for (let i = 1; i <= 3; i++) {
+                const speed = Math.floor(Math.random() * 6) + 1;
+                document.getElementById("hero" + i + "Speed").innerText = speed;
+                document.getElementById("hero" + i).querySelector("h4").firstChild.nodeValue = getRandomName() + " (Скорость: " + speed + ")";
+                turnOrder.push({ id: 'hero' + i, speed: speed, isPlayer: true, health: 100, prepared: false, isDead: false });
+            }
+            for (let i = 1; i <= 3; i++) {
+                const speed = Math.floor(Math.random() * 6) + 1;
+                document.getElementById("enemy" + i + "Speed").innerText = speed;
+                document.getElementById("enemy" + i).querySelector("h4").firstChild.nodeValue = enemyNames[Math.floor(Math.random() * enemyNames.length)] + " (Скорость: " + speed + ")";
+                turnOrder.push({ id: 'enemy' + i, speed: speed, isPlayer: false, health: 100, prepared: false, isDead: false });
+            }
+        }
+
+        function calculateTurnOrder() {
+            turnOrder.sort((a, b) => b.speed - a.speed);
+            turnOrder = turnOrder.filter(c => !c.isDead); // Исключаем мёртвых персонажей при подсчете порядка ходов 
+        }
+
+        function highlightCurrentTurn() {
+            const characters = document.querySelectorAll('.character');
+            characters.forEach(character => {
+                character.classList.remove('highlight');
+                const highlightElement = document.getElementById("highlight" + character.id.charAt(0).toUpperCase() + character.id.slice(1));
+                highlightElement.innerText = ''; // Убираем звёздочку
+            });
+            const currentCharacter = turnOrder[currentTurnIndex];
+            const characterElement = document.getElementById(currentCharacter.id);
+            characterElement.classList.add('highlight');
+            const highlightElement = document.getElementById("highlight" + currentCharacter.id.charAt(0).toUpperCase() + currentCharacter.id.slice(1));
+            highlightElement.innerText = '*'; // Добавляем звёздочку
+
+            if (currentCharacter.isPlayer) {
+                const enemies = turnOrder.filter(c => !c.isPlayer);
+                enemies.forEach(enemy => {
+                    const enemyElement = document.getElementById(enemy.id);
+                    enemyElement.onmouseover = () => enemyElement.classList.add('selected');
+                    enemyElement.onmouseout = () => enemyElement.classList.remove('selected');
+                    enemyElement.onclick = () => selectTarget(enemy.id, enemyElement);
+                });
+                document.getElementById('attackButton').style.display = 'block'; 
+                document.getElementById('provokeButton').style.display = 'block'; 
+                document.getElementById('prepareButton').style.display = 'block'; 
+            } else {
+                setTimeout(AIAttack, 1000); // AI делает атаку через секунду
+            }
+        }
+
+        function AIAttack() {
+            const currentCharacter = turnOrder[currentTurnIndex];
+            const enemies = turnOrder.filter(c => c.isPlayer && c.health > 0 && !c.isDead); 
+            const target = enemies[Math.floor(Math.random() * enemies.length)]; // Выбираем случайного противника
+            attackCharacter(currentCharacter.id, target.id);
+            nextTurn(); // Переход к следующему ходу
+        }
+
+        function selectTarget(targetId, element) {
+            const characters = document.querySelectorAll('.character');
+            characters.forEach(character => {
+                character.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedTarget = targetId;
+        }
+
+        function attack() {
+            if (selectedTarget) {
+                const currentCharacter = turnOrder[currentTurnIndex];
+                attackCharacter(currentCharacter.id, selectedTarget);
+                currentCharacter.prepared = false; 
+                nextTurn(); // Переход к следующему ходу
+            }
+        }
+
+        function provoke() {
+            const currentCharacter = turnOrder[currentTurnIndex];
+            currentCharacter.prepared = true; // Персонаж готовится к атаке
+            nextTurn(); // Переход к следующему ходу
+        }
+
+        function prepareAttack() {
+            const currentCharacter = turnOrder[currentTurnIndex];
+            currentCharacter.prepared = true; // Персонаж готовится к сильной атаке
+            nextTurn(); // Переход к следующему ходу
+        }
+
+        function attackCharacter(attackerId, defenderId) {
+            const defenderHealth = document.getElementById(defenderId + 'Health');
+            const currentHealth = parseInt(defenderHealth.innerText);
+
+            if (currentHealth > 0) {
+                const damage = turnOrder.find(c => c.id === attackerId).prepared ? 20 : 10; // Урон
+                const newHealth = currentHealth - damage;
+                defenderHealth.innerText = newHealth < 0 ? 0 : newHealth;
+
+                const defenderElement = document.getElementById(defenderId);
+                defenderElement.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    defenderElement.style.transform = 'translateY(0)';
+                }, 100);
+                if (turnOrder.find(c => c.id === defenderId).isPlayer) {
+                    handlePlayerDamage(defenderId, newHealth); 
+                } else if (newHealth <= 0) { 
+                    handleEnemyDeath(defenderId); // Убираем врага сразу при 0 хп
+                }
+            }
+        }
+
+        function handlePlayerDamage(playerId, newHealth) {
+            const player = turnOrder.find(c => c.id === playerId);
+            if (newHealth <= 0) {
+                const chanceToDie = Math.random() < 0.5; // 50% шанс смерти
+                if (chanceToDie) {
+                    player.isDead = true; 
+                    document.getElementById(playerId).style.opacity = 0.5; // Отображаем как мёртвого
+                    document.getElementById(playerId).querySelector("h4").innerText += " 💀"; // Добавляем черепок
+                }
+            }
+        }
+
+        function handleEnemyDeath(enemyId) {
+            const enemy = turnOrder.find(c => c.id === enemyId);
+            enemy.isDead = true; 
+            document.getElementById(enemyId).style.opacity = 0.5; // Отображаем как мёртвого
+            document.getElementById(enemyId).querySelector("h4").innerText += " 💀"; // Добавляем черепок
+        }
+
+        function nextTurn() {
+            currentTurnIndex = (currentTurnIndex + 1) % turnOrder.length; // Переход к следующему индексу
+            if (currentTurnIndex === 0) {
+                round++;
+                document.getElementById("roundCounter").innerText = 'Раунд: ' + round; // Увеличиваем раунд и обновляем текст
+                resetCharacters(); // Сбрасываем персонажей для следующего раунда
+            }
+            highlightCurrentTurn(); // Обновляем подсветку текущего персонажа
+            document.getElementById('attackButton').style.display = 'block'; 
+            document.getElementById('provokeButton').style.display = 'block'; 
+            document.getElementById('prepareButton').style.display = 'block'; 
+            selectedTarget = null; // Сбрасываем выбранную цель
+        }
+
+        function resetCharacters() {
+            turnOrder.forEach(character => {
+                if (!character.isDead) {
+                    character.speed = Math.floor(Math.random() * 6) + 1; // Присваиваем новую скорость
+                    document.getElementById(character.id + 'Speed').innerText = character.speed; // Обновляем скорость
+                }
+                character.prepared = false; // Сбрасываем состояние подготовки
+            });
+            calculateTurnOrder(); // Пересчитываем порядок ходов для нового раунда
+        }
+    </script>
+</body>
+</html>
