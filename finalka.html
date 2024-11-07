@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dead Estate Пример</title>
+    <style>
+        body { margin: 0; }
+        canvas { background: #000; display: block; }
+    </style>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Игрок
+    const player = {
+        x: canvas.width / 2,
+        y: canvas.height / 2,
+        size: 50,
+        speed: 5,
+        color: 'lime'
+    };
+
+    // Враги
+    const enemies = [];
+    function spawnEnemy() {
+        const enemySize = 40;
+        const x = Math.random() * (canvas.width - enemySize);
+        const y = Math.random() * (canvas.height - enemySize);
+        enemies.push({ x, y, size: enemySize, speed: 2, color: 'red' });
+    }
+
+    // Основные функции отрисовки
+    function drawPlayer() {
+        ctx.fillStyle = player.color;
+        ctx.fillRect(player.x, player.y, player.size, player.size);
+    }
+
+    function drawEnemies() {
+        enemies.forEach(enemy => {
+            ctx.fillStyle = enemy.color;
+            ctx.fillRect(enemy.x, enemy.y, enemy.size, enemy.size);
+        });
+    }
+
+    // Обновление игры
+    function update() {
+        enemies.forEach(enemy => {
+            // Простейшее движение врага
+            if (enemy.x < player.x) enemy.x += enemy.speed;
+            if (enemy.x > player.x) enemy.x -= enemy.speed;
+            if (enemy.y < player.y) enemy.y += enemy.speed;
+            if (enemy.y > player.y) enemy.y -= enemy.speed;
+        });
+
+        // Удаляем врагов, вышедших за экран
+        enemies.filter(enemy => enemy.x > 0 && enemy.x < canvas.width && enemy.y > 0 && enemy.y < canvas.height);
+    }
+
+    function gameLoop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        update();
+        drawPlayer();
+        drawEnemies();
+        requestAnimationFrame(gameLoop);
+    }
+
+    // Управление игроком
+    document.addEventListener('keydown', (event) => {
+        if (event.code === 'ArrowUp' && player.y > 0) player.y -= player.speed;
+        if (event.code === 'ArrowDown' && player.y < canvas.height - player.size) player.y += player.speed;
+        if (event.code === 'ArrowLeft' && player.x > 0) player.x -= player.speed;
+        if (event.code === 'ArrowRight' && player.x < canvas.width - player.size) player.x += player.speed;
+    });
+
+    setInterval(spawnEnemy, 1000); // Создаем врагов каждую секунду
+    gameLoop(); // Запускаем игровой цикл
+</script>
+</body>
+</html>

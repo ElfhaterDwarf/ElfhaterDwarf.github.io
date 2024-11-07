@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Викторина про Пашу Техника</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .question { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<h1>Викторина про Пашу Техника</h1>
+<form id="quizForm">
+    <div class="question">
+        <label>1. Как зовут Пашу?</label><br>
+        <input type="radio" name="q1" value="0"> Олег<br>
+        <input type="radio" name="q1" value="0"> Никита<br>
+        <input type="radio" name="q1" value="1"> Паша<br>
+        <input type="radio" name="q1" value="0"> Валерия<br>
+    </div>
+
+    <div class="question">
+        <label>2. Какой стиль музыки предпочитает Паша?</label><br>
+        <input type="radio" name="q2" value="0"> Поп<br>
+        <input type="radio" name="q2" value="1"> Хип-хоп<br>
+        <input type="radio" name="q2" value="0"> Классика<br>
+        <input type="radio" name="q2" value="0"> Рок<br>
+    </div>
+
+    <div class="question">
+        <label>3. Какую фразу Паша часто использует в своих видео?</label><br>
+        <input type="radio" name="q3" value="1"> "Все будет чики-пуки!"<br>
+        <input type="radio" name="q3" value="0"> "Мир во всем мире!"<br>
+        <input type="radio" name="q3" value="0"> "Это фулл-пачка!"<br>
+        <input type="radio" name="q3" value="0"> "Давайте помоем руки!"<br>
+    </div>
+
+    <div class="question">
+        <label>4. С каким интернет-проектом Паша Техник чаще всего ассоциируется?</label><br>
+        <input type="radio" name="q4" value="0"> ВКонтакте<br>
+        <input type="radio" name="q4" value="1"> YouTube<br>
+        <input type="radio" name="q4" value="0"> Instagram<br>
+        <input type="radio" name="q4" value="0"> TikTok<br>
+    </div>
+
+    <div class="question">
+        <label>5. Какой предмет искусства Паша Техник активно поддерживает?</label><br>
+        <input type="radio" name="q5" value="0"> Живопись<br>
+        <input type="radio" name="q5" value="1"> Музыка<br>
+        <input type="radio" name="q5" value="0"> Кино<br>
+        <input type="radio" name="q5" value="0"> Театр<br>
+    </div>
+
+    <div class="question">
+        <label>6. Какой внешний атрибут часто сопровождает Пашу в своих выступлениях?</label><br>
+        <input type="radio" name="q6" value="0"> Шляпа<br>
+        <input type="radio" name="q6" value="1"> Очки<br>
+        <input type="radio" name="q6" value="0"> Бандана<br>
+        <input type="radio" name="q6" value="0"> Перчатки<br>
+    </div>
+
+    <div class="question">
+        <label>7. В каком городе родился Паша Техник?</label><br>
+        <input type="radio" name="q7" value="0"> Москва<br>
+        <input type="radio" name="q7" value="0"> Санкт-Петербург<br>
+        <input type="radio" name="q7" value="1"> Казань<br>
+        <input type="radio" name="q7" value="0"> Владивосток<br>
+    </div>
+
+    <button type="button" onclick="calculateScore()">Узнать результат</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+function calculateScore() {
+    let score = 0;
+    const totalQuestions = 7;
+
+    for (let i = 1; i <= totalQuestions; i++) {
+        const question = document.getElementsByName("q" + i);
+        for (let j = 0; j < question.length; j++) {
+            if (question[j].checked) {
+                score += parseInt(question[j].value);
+            }
+        }
+    }
+
+    let resultText;
+    if (score === totalQuestions) {
+        resultText = "Вы - Паша Техник.";
+    } else if (score >= 3) {
+        resultText = "Вы - фрик.";
+    } else {
+        resultText = "Вы - нормис. Сходите и помойтесь.";
+    }
+
+    document.getElementById("result").innerText = resultText;
+}
+</script>
+
+</body>
+</html>
