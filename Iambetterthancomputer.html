@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Викторина Warhammer 40000</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .hidden { display: none; }
+        .scores { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .score { font-size: 18px; }
+        .correct { background-color: green; color: white; }
+        .incorrect { background-color: red; color: white; }
+        #playerImage, #computerImage {
+            position: fixed;
+            bottom: 20px;
+            width: 300px; /* Увеличенные изображения */
+        }
+        #playerImage { left: 20px; }
+        #computerImage { right: 20px; }
+        .quiz-container {
+            display: flex; /* Используем flex для компоновки */
+            justify-content: space-between;
+        }
+        .quiz {
+            width: 45%; /* Ширина для отображения вопросов */
+            margin-bottom: 20px;  
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Викторина по вселенной Warhammer 40000</h1>
+
+<div class="scores">
+    <div class="score" id="playerScore">Очки игрока: 0</div>
+    <div class="score" id="computerScore">Очки компьютера: 0</div>
+</div>
+
+<div class="quiz-container">
+    <div class="quiz" id="quiz">
+        <!-- Вопросы будут добавляться сюда -->
+    </div>
+</div>
+
+<button id="submit">Ответить</button>
+<button id="next" class="hidden">Дальше</button>
+<p id="result" class="hidden"></p>
+
+<h2>Бог-император, последний оплот человечества</h2>
+<img src="player.png" id="playerImage" alt="Игрок">
+<h2>Чат GPT 5.0</h2>
+<img src="computer.png" id="computerImage" alt="Компьютер">
+
+<script>
+    const questions = [
+        { question: "Какое имя носит Император Человечества?", answers: ["Хорус", "Гримдарк", "Сигмар", "Брагарон"], correct: 0 },
+        { question: "Кто является римским правителем Тау?", answers: ["О'Кан", "Аун'Ши", "Р'Mирра", "Аун'O"], correct: 1 },
+        { question: "Какой бог Хаоса олицетворяет разрушение и беспорядок?", answers: ["Тзинч", "Нургл", "Слаанеш", "Хорна"], correct: 3 },
+        { question: "Кто командует Легионом Ультрамаринов?", answers: ["Рогал Дорн", "Себастиан Скоур", "Неймон", "Гиллиман"], correct: 3 },
+        { question: "Какой фракцией управляет император Стрелы?", answers: ["Темные ангелы", "Кровавые ангелы", "Серые рыцари", "Сестры битвы"], correct: 1 },
+        { question: "Как называется мощный корабль у ордена 'Кровавые ангелы'?", answers: ["Десентор самого лучшего", "Невинный", "Пренебригатор", "Имперский флагман"], correct: 2 },
+        { question: "Какой фракцией под командованием проектора Альфа?", answers: ["Аэльдары", "Тау", "Некроны", "Нургл"], correct: 0 },
+        { question: "Что такое 'Астрономикон'?", answers: ["Архитектура звездолета", "Сигнал для ведения войны", "Свет, который ведет к Императору", "Знания о Хаосе"], correct: 2 },
+        { question: "Какой вид Хаоса рассматривается как 'истинный'?", answers: ["Слаанеш", "Кхаос", "Тзинч", "Нургл"], correct: 1 },
+        { question: "Как называется план, в котором защищает Император?", answers: ["Галактика", "Астрономика", "Варп", "Империя"], correct: 3 },
+        // 27 дополнительных вопросов
+        { question: "Кто такая Сестра Битвы?", answers: ["Космический маг", "Воин после Императора", "Сестра служительница Императора", "Пророк"], correct: 2 },
+        { question: "Какой враг Империи является некротическим?", answers: ["Орки", "Эльдары", "Некроны", "Спесс Марин"], correct: 2 },
+        { question: "Какой планетарный орден защищает Землю?", answers: ["Адептус Механикус", "Имперская Гвардия", "Сестры Битвы", "Спесс Марин"], correct: 1 },
+        { question: "Какой основатель Императора был первым?", answers: ["Хорус", "Гиллиман", "Рогал Дорн", "Себастиан Скоур"], correct: 0 },
+        { question: "Какую часть врагов сражаются Адепты Механикус?", answers: ["Плутон", "Беспорядок", "Зены", "Империум"], correct: 2 },
+        { question: "Какой символ Империи?", answers: ["Два орла", "Ястреб", "Серый", "Небесный порядок"], correct: 0 },
+        { question: "Что такое 'Ультрамар'?", answers: ["Космос", "Царство Орков", "Империум", "Глава Империи"], correct: 3 },
+        { question: "Какой цвет у Космоса?", answers: ["Красный", "Синий", "Зеленый", "Фиолетовый"], correct: 1 },
+        { question: "Кто является основателем Железных Рыцарей?", answers: ["Оберон", "Мален", "Фероникл", "Ирец"], correct: 1 },
+        { question: "Что такое 'Астрономикон'?", answers: ["Значение звезды", "Свет Императора", "Способ уловить Хаос", "Знание мироздания"], correct: 1 },
+        { question: "Какую тему подразумевает 'Горельевская война'?", answers: ["Война с Хаосом", "Сражение против Нургла", "Конфликт против Орков", "Все вышеперечисленное"], correct: 3 },
+        { question: "Что такое 'Галактическое поле битвы'?", answers: ["Царь звёзд", "Место, где сражаются враги", "План семи мошенников", "Силы Империи"], correct: 1 },
+        { question: "Как называется система укрытий у Космо-эсператоров?", answers: ["Бункерный план", "Скрытная схема", "Космические щиты", "Противовирусные оружия"], correct: 2 },
+        { question: "Кто такой Хорус?", answers: ["Лидер Империума", "Долгожитель", "Неоценимый", "Опасная сила"], correct: 0 },
+        { question: "Каков основной символ Хаоса?", answers: ["Одинокий демон", "Красный орел", "Шар, окруженный огнем", "Видение планеты"], correct: 3 },
+        { question: "Что такое 'Имперского легкоходного пехоту'?", answers: ["Сила фронта", "Настоящая угроза", "Военное подразделение", "Где находились уничтоженные войска"], correct: 2 },
+        { question: "Что такое 'Адептус механикус'?", answers: ["Организация вне Империи", "Сотрудники храма", "Релапифит технологии", "Проект навигации"], correct: 1 },
+        { question: "Какой жанр имеет вселенная Warhammer 40000?", answers: ["Научная фантастика", "Фэнтези", "Ужасы", "Историческая драма"], correct: 0 },
+        { question: "Какой сталин из Warhammer 40000 помимо Императора?", answers: ["Ксяцзис", "Брат Гиллиман", "Морфус", "Капитан Пшижон"], correct: 1 },
+        { question: "Какой основой для всех видов технологий?", answers: ["Знания Императора", "Искусственное создание", "Технология эфира", "Военная сила"], correct: 1 },
+        { question: "Что такое Ариман?", answers: ["Непобедимый бог", "Проект времени", "Архив знания", "Лидер 4-й армии"], correct: 0 },
+        { question: "Какое имя носит император?", answers: ["Инквизиция", "Регент", "Знания знати", "Культ Ультрамаров"], correct: 3 }
+    ];
+
+    let playerScore = 0;
+    let computerScore = 0;
+    let askedQuestions = [];
+
+    function updateScore() {
+        document.getElementById('playerScore').innerText = `Очки игрока: ${playerScore}`;
+        document.getElementById('computerScore').innerText = `Очки компьютера: ${computerScore}`;
+    }
+
+    function getRandomQuestion() {
+        if (askedQuestions.length === questions.length) {
+            alert('Все вопросы заданы. Игра закончена!');
+            showResults();
+            return null;
+        }
+
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * questions.length);
+        } while (askedQuestions.includes(randomIndex));
+
+        askedQuestions.push(randomIndex);
+        return questions[randomIndex];
+    }
+
+    function showQuestion() {
+        const quizDiv = document.getElementById('quiz');
+        quizDiv.innerHTML = '';
+
+        const question = getRandomQuestion();
+        if (!question) return;
+
+        const questionElement = document.createElement('div');
+        questionElement.innerHTML = `<h3>${question.question}</h3>`;
+
+        question.answers.forEach((answer, index) => {
+            questionElement.innerHTML += `
+                <label>
+                    <input type="radio" name="playerAnswer" value="${index}">${answer}
+                    <span class="answer-label hidden"></span>
+                </label><br>`;
+        });
+
+        quizDiv.appendChild(questionElement);
+        document.getElementById('submit').classList.remove('hidden');
+    }
+
+    function showResults() {
+        const result = document.getElementById('result');
+        document.getElementById('next').classList.add('hidden');
+        document.getElementById('submit').classList.add('hidden');
+
+        result.classList.remove('hidden');
+        result.innerHTML = playerScore >= 10
+            ? `Поздравляем! Вы победили с ${playerScore} очками!`
+            : `Компьютер победил с ${computerScore} очками!`;
+    }
+
+    function highlightAnswers(correctAnswerIndex, playerAnswerIndex) {
+        const labels = document.querySelectorAll('#quiz label');
+        labels.forEach((label, index) => {
+            const answerLabel = label.querySelector('.answer-label');
+
+            if (index === correctAnswerIndex) {
+                label.classList.add('correct');
+                answerLabel.innerText = " (Правильный ответ)";
+            } else {
+                label.classList.remove('correct');
+                answerLabel.innerText = '';
+            }
+
+            if (index === playerAnswerIndex && index !== correctAnswerIndex) {
+                label.classList.add('incorrect');
+                answerLabel.innerText = " (Игрок)";
+            }
+        });
+
+        const computerAnswerIndex = Math.floor(Math.random() * 4);
+        labels.forEach((label, index) => {
+            const answerLabel = label.querySelector('.answer-label');
+            if (index === computerAnswerIndex) {
+                label.classList.add('incorrect');
+                answerLabel.innerText = " (Компьютер)";
+                if (index === correctAnswerIndex) {
+                    computerScore++;
+                }
+            }
+        });
+
+        setTimeout(() => {
+            if (playerScore < 10 && computerScore < 10) {
+                showQuestion();
+                updateScore();
+            } else {
+                showResults();
+            }
+        }, 2000);
+    }
+
+    function nextQuestion() {
+        const selectedAnswer = document.querySelector('input[name="playerAnswer"]:checked');
+        if (selectedAnswer) {
+            const playerAnswerIndex = parseInt(selectedAnswer.value);
+            const correctAnswerIndex = questions[askedQuestions[askedQuestions.length - 1]].correct;
+
+            if (playerAnswerIndex === correctAnswerIndex) {
+                playerScore++;
+            }
+
+            highlightAnswers(correctAnswerIndex, playerAnswerIndex);
+        } else {
+            alert("Выберите ответ!");
+        }
+    }
+
+    document.getElementById('submit').addEventListener('click', nextQuestion);
+    document.getElementById('next').addEventListener('click', showQuestion);
+
+    // Показать первый вопрос
+    showQuestion();
+    updateScore();
+</script>
+
+</body>
+</html>
