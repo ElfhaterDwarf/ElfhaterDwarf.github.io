@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Симулятор мистера великолепного профессора Леонида</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 0 auto;
+            width: 300px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #6200ea;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Мистер великолепный профессор Леонид (гей)</h1>
+        <p id="status">Статус: Нормально</p>
+        <p id="motivation">Мотивация: 100</p>
+        <button onclick="takeFentanyl()">Принять фентанил</button>
+        <button onclick="getMotivation()">Получить мотивацию</button>
+        <p id="eventResult"></p>
+    </div>
+
+    <script>
+        let status = "Нормально";
+        let motivation = 100; // Уровень мотивации
+        let fentanylTaken = 0; // Подсчет принятого фентанила
+
+        // Функция для принятия фентанила
+        function takeFentanyl() {
+            fentanylTaken += 1; // Увеличиваем количество принятого фентанила
+            status = "Под кайфом";
+            document.getElementById("status").innerText = "Статус: " + status;
+
+            if (fentanylTaken >= 3) { // Если фентанила приняли слишком много
+                endGame("Вы умерли от передозировки. Игра окончена.");
+            } else {
+                randomEvent(); // Запуск случайного события после действия
+                updateMotivation(); // Обновление отображаемой мотивации
+            }
+        }
+
+        // Функция для получения мотивации
+        function getMotivation() {
+            status = "Вдохновлён";
+            document.getElementById("status").innerText = "Статус: " + status;
+            motivation = Math.min(motivation + 20, 100); // Увеличивает мотивацию, максимум 100
+            randomEvent(); // Запуск случайного события после действия
+            updateMotivation(); // Обновление отображаемой мотивации
+        }
+
+        // Функция для запуска случайного события
+        function randomEvent() {
+            const events = [
+                { question: "Вы нашли деньги на улице. Что делать?", options: [
+                    { choice: "Поднять и потратить", result: "Вы потратили деньги на фентанил!" },
+                    { choice: "Сохранить на черный день", result: "Вы стали обладателем тайных сбережений." }
+                ]},
+                { question: "К вам подошел человек и предложил сделку. Что делать?", options: [
+                    { choice: "Согласиться на сделку", result: "Сделка оказалась рискованной, но прибыльной!" },
+                    { choice: "Отказаться", result: "Вы избежали неприятностей." }
+                ]},
+                { question: "Вы потеряли мотивацию! Как реагировать?", options: [
+                    { choice: "Посмотреть вдохновляющее видео", result: "Вас снова вдохновило, мотивация +30!", effect: () => motivation = Math.min(motivation + 30, 100) },
+                    { choice: "Сдаться и ничего не делать", result: "Вы погрузились в отсутствие действий, мотивация -50!", effect: () => motivation = Math.max(motivation - 50, 0) }
+                ]},
+                { question: "Вы встретили старого знакомого и не хотите разговаривать. Как быть?", options: [
+                    { choice: "Скрыться", result: "Вы скрылись, но чувствуете себя виноватым.", effect: () => motivation = Math.max(motivation - 20, 0) },
+                    { choice: "Поговорить", result: "Вы восстановили связь, мотивация +10!", effect: () => motivation = Math.min(motivation + 10, 100) }
+                ]},
+                { question: "Вы решили посидеть на дваче, где происходят страшные вещи. Что делать?", options: [
+                    { choice: "Смотреть страшилки", result: "Вы напугались, мотивация -20!", effect: () => motivation = Math.max(motivation - 20, 0) },
+                    { choice: "Игнорировать", result: "Вы сосредоточились на позитивных мыслях, мотивация +10!", effect: () => motivation = Math.min(motivation + 10, 100) }
+                ]},
+                { question: "Вы пообщались с друзьями, но они обсудили неприятные темы. Как отреагировать?", options: [
+                    { choice: "Участвовать в обсуждении", result: "Это вас расстроило, мотивация -30!", effect: () => motivation = Math.max(motivation - 30, 0) },
+                    { choice: "Сменить тему", result: "Темы стали более позитивными, мотивация +20!", effect: () => motivation = Math.min(motivation + 20, 100) }
+                ]},
+                // Добавление 30 случайных событий, которые препятствуют принятию фентанила и получению мотивации
+                { question: "Вы получили негативный комментарий в интернете. Что делать?", options: [
+                    { choice: "Игнорировать", result: "Ваше настроение упало, мотивация -15!", effect: () => motivation = Math.max(motivation - 15, 0) },
+                    { choice: "Ответить", result: "Вы вступили в конфликт, мотивация -25!", effect: () => motivation = Math.max(motivation - 25, 0) }
+                ]},
+                { question: "Вы забыли важную дату. Как отреагировать?", options: [
+                    { choice: "Попытаться исправить ситуацию", result: "Вы сделали все возможное, мотивация +10!", effect: () => motivation = Math.min(motivation + 10, 100) },
+                    { choice: "Скорбеть", result: "Вы расстроились, мотивация -20!", effect: () => motivation = Math.max(motivation - 20, 0) }
+                ]},
+                { question: "Вы встретили человека, который вас не поддерживает. Что делать?", options: [
+                    { choice: "Пообщаться с ним", result: "Разговор оказался неудобным, мотивация -30!", effect: () => motivation = Math.max(motivation - 30, 0) },
+                    { choice: "Уйти", result: "Вы избегли конфликта, мотивация +5!", effect: () => motivation = Math.min(motivation + 5, 100) }
+                ]},
+                { question: "Ваш любимый сериал закончился. Что делать?", options: [
+                    { choice: "Посмотреть новый", result: "Вы нашли новое увлечение, мотивация +15!", effect: () => motivation = Math.min(motivation + 15, 100) },
+                    { choice: "Опечалиться", result: "Вам грустно, мотивация -20!", effect: () => motivation = Math.max(motivation - 20, 0) }
+                ]},
+                { question: "К вам пришли друзья с плохими новостями. Как реагировать?", options: [
+                    { choice: "Выслушать их", result: "Вам стало грустно, мотивация -25!", effect: () => motivation = Math.max(motivation - 25, 0) },
+                    { choice: "Сказать, что все будет хорошо", result: "Вы попытались поддержать их, мотивация +10!", effect: () => motivation = Math.min(motivation + 10, 100) }
+                ]},
+                { question: "Вы увидели новое видео на YouTube, которое вас заинтересовало. Что делать?", options: [
+                    { choice: "Просмотреть его", result: "Вы потратили много времени, мотивация -10!", effect: () => motivation = Math.max(motivation - 10, 0) },
+                    { choice: "Пропустить", result: "Вы остались в курсе новинок, мотивация +5!", effect: () => motivation = Math.min(motivation + 5, 100) }
+                ]},
+                { question: "Вы думаете о проблемах на работе. Как реагировать?", options: [
+                    { choice: "Поработать над ними", result: "Вам стало легче, мотивация +10!", effect: () => motivation = Math.min(motivation + 10, 100) },
+                    { choice: "Игнорировать", result: "Проблемы остаются, мотивация -15!", effect: () => motivation = Math.max(motivation - 15, 0) }
+                ]},
+                { question: "Вы получили новую задачу. Что делать?", options: [
+                    { choice: "Начать выполнять", result: "Вы сделали первый шаг, мотивация +15!", effect: () => motivation = Math.min(motivation + 15, 100) },
+                    { choice: "Отложить на потом", result: "Вам стало страшно, мотивация -20!", effect: () => motivation = Math.max(motivation - 20, 0) }
+                ]},
+                { question: "Ваш друг позвонил с плохими новостями. Что делать?", options: [
+                    { choice: "Выслушать", result: "Вы расстроились, мотивация -25!", effect: () => motivation = Math.max(motivation - 25, 0) },
+                    { choice: "Сказать, что все будет хорошо", result: "Вы подняли настроение другу, мотивация +10!", effect: () => motivation = Math.min(motivation + 10, 100) }
+                ]},
+                { question: "Случайно увидели пост, который вас разозлил. Как реагировать?", options: [
+                    { choice: "Прочитать и ответить", result: "Вы встали на защиту, мотивация -30!", effect: () => motivation = Math.max(motivation - 30, 0) },
+                    { choice: "Игнорировать и уйти", result: "Вы избежали конфликта, мотивация +5!", effect: () => motivation = Math.min(motivation + 5, 100) }
+                ]},
+                { question: "Вы столкнулись с проблемами в отношениях. Что делать?", options: [
+                    { choice: "Поговорить с партнером", result: "Разговор оказался полезным, мотивация +20!", effect: () => motivation = Math.min(motivation + 20, 100) },
+                    { choice: "Закрыться в себе", result: "Вам стало грустно, мотивация -25!", effect: () => motivation = Math.max(motivation - 25, 0) }
+                ]},
+                { question: "Обнаружили, что пропустили важное событие. Как реагировать?", options: [
+                    { choice: "Попытаться связаться с кем-то", result: "Вы сделали попытку, мотивация +15!", effect: () => motivation = Math.min(motivation + 15, 100) },
+                    { choice: "Пожалеть себя", result: "Вы расстроились, мотивация -20!", effect: () => motivation = Math.max(motivation - 20, 0) }
+                ]},
+                { question: "Вы прочитали плохую новость в новостях. Что делать?", options: [
+                    { choice: "Обсудить с друзьями", result: "Темы обсуждения стали мрачными, мотивация -15!", effect: () => motivation = Math.max(motivation - 15, 0) },
+                    { choice: "Игнорировать", result: "Вы не поддались панике, мотивация +10!", effect: () => motivation = Math.min(motivation + 10, 100) }
+                ]},
+                { question: "Вы отошли от своих планов на день. Как реагировать?", options: [
+                    { choice: "Принять ситуацию", result: "Вы успокоились, мотивация +5!", effect: () => motivation = Math.min(motivation + 5, 100) },
+                    { choice: "Расстроиться", result: "Вы расстроены, мотивация -20!", effect: () => motivation = Math.max(motivation - 20, 0) }
+                ]},
+                { question: "Вы видели человека, который вам неприятен. Как реагировать?", options: [
+                    { choice: "Игнорировать его", result: "Вы остались в спокойствии, мотивация +5!", effect: () => motivation = Math.min(motivation + 5, 100) },
+                    { choice: "Попытаться поговорить", result: "Разговор оказался неловким, мотивация -25!", effect: () => motivation = Math.max(motivation - 25, 0) }
+                ]},
+                { question: "Вы были приглашены на вечеринку, но сомневаетесь идти. Что делать?", options: [
+                    { choice: "Согласиться", result: "Вечеринка оказалась веселой, мотивация +20!", effect: () => motivation = Math.min(motivation + 20, 100) },
+                    { choice: "Отказаться", result: "Вы остались дома, мотивация -10!", effect: () => motivation = Math.max(motivation - 10, 0) }
+                ]},
+                { question: "Случайно подслушали сплетни о себе. Как реагировать?", options: [
+                    { choice: "Игнорировать", result: "Вы остались спокойны, мотивация +5!", effect: () => motivation = Math.min(motivation + 5, 100) },
+                    { choice: "Расстроиться", result: "Это вас задело, мотивация -20!", effect: () => motivation = Math.max(motivation - 20, 0) }
+                ]},
+                { question: "Вы видите сцену насилия в фильме. Как действовать?", options: [
+                    { choice: "Закрыть глаза", result: "Вы избежали самых страшных моментов, мотивация -5!", effect: () => motivation = Math.max(motivation - 5, 0) },
+                    { choice: "Посмотреть", result: "Сцена вас рассердил, мотивация -30!", effect: () => motivation = Math.max(motivation - 30, 0) }
+                ]},
+                { question: "Вы отклонили важное предложение. Как реагировать?", options: [
+                    { choice: "Жалеть об этом", result: "Вы расстроились, мотивация -20!", effect: () => motivation = Math.max(motivation - 20, 0) },
+                    { choice: "Продолжить жизнь", result: "Вы успокоились, мотивация +10!", effect: () => motivation = Math.min(motivation + 10, 100) }
+                ]},
+                { question: "К вам подошел незнакомец с просьбой о помощи. Как реагировать?", options: [
+                    { choice: "Помочь", result: "Вы помогли, и это подняло вам настроение, мотивация +10!", effect: () => motivation = Math.min(motivation + 10, 100) },
+                    { choice: "Отказаться", result: "Вы почувствовали вину, мотивация -15!", effect: () => motivation = Math.max(motivation - 15, 0) }
+                ]},
+                { question: "Вы получили неожиданный подарок. Что делать?", options: [
+                    { choice: "Поблагодарить", result: "Вы рады, мотивация +15!", effect: () => motivation = Math.min(motivation + 15, 100) },
+                    { choice: "Сомневаться в благодарности", result: "Вы не уверены, мотивация -10!", effect: () => motivation = Math.max(motivation - 10, 0) }
+                ]},
+                { question: "Вы слышите новую песню, которую не любите. Как отреагировать?", options: [
+                    { choice: "Послушать", result: "Вам не понравилось, мотивация -20!", effect: () => motivation = Math.max(motivation - 20, 0) },
+                    { choice: "Пропустить", result: "Вы избежали плохого настроения, мотивация +5!", effect: () => motivation = Math.min(motivation + 5, 100) }
+                ]},
+                { question: "Увидев старую фотографию, вы вспомнили о прошлом. Что делать?", options: [
+                    { choice: "Обдумать хорошие моменты", result: "Вы чувствовали ностальгию, мотивация +15!", effect: () => motivation = Math.min(motivation + 15, 100) },
+                    { choice: "Заблокировать воспоминания", result: "Вам стало грустно, мотивация -20!", effect: () => motivation = Math.max(motivation - 20, 0) }
+                ]},
+                { question: "Вы получили шутку, которая обидела вас. Как реагировать?", options: [
+                    { choice: "Посмеяться", result: "Вы не поддались обиде, мотивация +5!", effect: () => motivation = Math.min(motivation + 5, 100) },
+                    { choice: "Пожаловаться", result: "Вам стало плохо, мотивация -30!", effect: () => motivation = Math.max(motivation - 30, 0) }
+                ]}
+                // Добавьте дополнительные события аналогичным образом.
+            ];
+
+            const randomIndex = Math.floor(Math.random() * events.length);
+            const event = events[randomIndex];
+
+            let eventHtml = `<strong>${event.question}</strong><br>`;
+            event.options.forEach(option => {
+                eventHtml += `<button onclick="handleChoice('${option.result}', ${option.effect ? option.effect.toString() : 'null'})">${option.choice}</button>`;
+            });
+
+            document.getElementById("eventResult").innerHTML = eventHtml;
+        }
+
+        // Функция для обработки выбора игрока
+        function handleChoice(result, effect) {
+            if (effect) effect(); // Применить эффект, если он есть
+            document.getElementById("eventResult").innerHTML = result;
+            updateMotivation(); // Обновить отображаемую мотивацию
+        }
+
+        // Функция для обновления мотивации
+        function updateMotivation() {
+            document.getElementById("motivation").innerText = "Мотивация: " + motivation; // Обновление мотивации в статусе
+        }
+
+        // Функция для завершения игры
+        function endGame(message) {
+            document.getElementById("eventResult").innerHTML = message; // Показать сообщение о смерти
+            // Отключение всех кнопок
+            document.querySelector('button[onclick="takeFentanyl()"]').disabled = true;
+            document.querySelector('button[onclick="getMotivation()"]').disabled = true;
+        }
+    </script>
+</body>
+</html>
