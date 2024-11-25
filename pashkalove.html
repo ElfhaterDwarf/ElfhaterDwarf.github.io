@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Свидание с Пашей Техником</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        #dialogue {
+            margin: 20px;
+            padding: 20px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    #response-buttons {
+            display: none;
+        }
+</style>
+</head>
+<body>
+    <h1>Свидание с Пашей Техником</h1>
+    <div id="dialogue">Здесь появятся диалоги...</div>
+    <img id="character-img" src="biden.jpg" alt="Паша Техник">
+    <div id="response-buttons"></div>
+
+    <script>
+        let relationshipLevel = 5;
+        const maxLevel = 10;
+        const minLevel = 0;
+
+        const dialogues = [
+            "Привет! Как ты сегодня?",
+            "Какой твой любимый жанр музыки?",
+            "Что для тебя значит музыка?",
+            "Как ты проводишь свободное время?",
+            "Какой твой любимый фильм?",
+            "Кто твой любимый артист?",
+            "Где ты хочешь провести следующий концерт?",
+            "Как ты относишься к новым технологиям в музыке?",
+            "Как ты отдохнешь после концерта?",
+            "Что тебя вдохновляет на творчество?",
+            "Как ты стал музыкантом?",
+            "Кого бы ты хотел пригласить на свой концерт?",
+            "Ты предпочитаешь писать музыку или исполнять чужие произведения?",
+            "Как ты справляешься с критикой?",
+            "Каковы твои цели в музыке?",
+            "Какой у тебя наилучший концертный опыт?"
+        ];
+
+        const responses = [
+            { text: "Я люблю поп-музыку!", change: 1 },
+            { text: "Рок всегда с нами!", change: 1 },
+            { text: "Я предпочитаю классику.", change: -1 },
+            { text: "Музыка — это моя жизнь!", change: 1 },
+            { text: "Ничего особенного, просто дни идут.", change: -1 },
+            { text: "Я люблю проводить время с друзьями.", change: 1 },
+            { text: "Фильмы о музыке - мое всё!", change: 1 },
+            { text: "Не люблю кино.", change: -1 },
+            { text: "Вдохновение приходит само по себе.", change: 1 },
+            { text: "Мне все равно на критику.", change: -1 },
+            { text: "Я хочу записать свой альбом.", change: 1 },
+            { text: "Стараюсь писать только то, что мне нравится.", change: 1 },
+            { text: "Я просто хочу наслаждаться процессом.", change: 0 },
+            { text: "Конечно, мечтаю об успешной карьере.", change: 2 },
+            { text: "Я не знаю, просто стараюсь быть собой.", change: 0 }
+        ];
+
+        function startDialogue() {
+        showNextLine();
+        }
+
+        let currentDialogueIndex = 0;
+        let currentResponses = [];
+
+        function showNextLine() {
+        const dialogue = document.getElementById("dialogue");
+        const responseButtonsDiv = document.getElementById("response-buttons");
+        responseButtonsDiv.innerHTML = '';
+
+        if (currentDialogueIndex < dialogues.length) {
+        dialogue.innerHTML = dialogues[currentDialogueIndex];
+        currentResponses = responses.slice();
+        currentResponses.sort(() => Math.random() - 0.5); // Перемешиваем ответы
+        currentResponses.forEach((response) => {
+            const button = document.createElement("button");
+            button.innerText = response.text;
+            button.onclick = () => chooseResponse(response.change);
+            responseButtonsDiv.appendChild(button);
+        });
+        responseButtonsDiv.style.display = "block";
+        } else {
+        checkRelationshipStatus();
+        dialogue.innerHTML = "Давайте поговорим еще!";
+        }
+        currentDialogueIndex++;
+        }
+
+        function chooseResponse(change) {
+        relationshipLevel += change;
+        showNextLine();
+        checkRelationshipStatus();
+        }
+
+        function checkRelationshipStatus() {
+        const dialogue = document.getElementById("dialogue");
+        if (relationshipLevel >= maxLevel) {
+        dialogue.innerHTML = "Вы достигли максимального уровня отношений! Это замечательная концовка вашего свидания с Пашей Техником!";
+        document.getElementById("response-buttons").innerHTML = ''; // Скрыть кнопки
+        } else if (relationshipLevel <= minLevel) {
+        dialogue.innerHTML = "Увы, ваши отношения с Пашей Техником закончились плохо. Надеюсь, в следующий раз повезет лучше.";
+        document.getElementById("response-buttons").innerHTML = ''; // Скрыть кнопки
+        }
+        }
+
+        startDialogue(); // Начинаем диалог
+    </script>
+</body>
+</html>
