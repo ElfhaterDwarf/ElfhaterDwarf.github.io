@@ -13,8 +13,8 @@
             background-image: url(slonizmha.png);
             color:green;
             font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-            font-size: 35px;
-            color:rgb(184, 164, 236);
+            font-size: 55px;
+            color:rgb(58, 35, 10);
             
         }
         h1{
@@ -47,6 +47,26 @@
     <a href="index.html"> <h2>СЛОН ИЗ МХА </h2> </a> <br>
 </body>
 <script>
+let box = document.createElement('div'); 
+        box.style.backgroundColor = 'black';
+        document.body.append(box);
 
+        let height = 7;
+        let width = 4;
+        let choco = 15;
+
+        for(let k = 1; k <= height; k++) {
+            for (let i = 1; i <= width; i++) {
+                box.innerHTML += ('[]' + '  ');
+            }
+            box.innerHTML += ('<br>');
+        }
+        
+        if (choco <= height*width && (choco % 4 == 0 || choco % 7 == 0) ){
+            document.write('Вы сможете разделить шоколадку на' + choco + ' ' + 'кусков')
+        }
+else{
+    document.write('Вы не сможете разделить шоколадку на ' + choco + ' ' + 'кусков')
+}    
     </script>
 </html>
