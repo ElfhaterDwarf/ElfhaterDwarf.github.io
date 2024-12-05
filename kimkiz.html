@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Симулятор Кима Кицураги</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        #container {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #dialogue {
+            margin-bottom: 20px;
+        }
+        button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <h1>Симулятор Кима Кицураги</h1>
+    <div id="dialogue">Привет. Какой у тебя вопрос?</div>
+    <button onclick="respond(1)">Как ты, Ким?</button>
+    <button onclick="respond(2)">Расскажи о расследовании.</button>
+    <button onclick="respond(3)">Как ты относишься к нашему напарнику?</button>
+</div>
+
+<script>
+    function respond(choice) {
+        const dialogue = document.getElementById('dialogue');
+        switch (choice) {
+            case 1:
+                dialogue.innerHTML = "Я в порядке, спасибо. А ты?";
+                break;
+            case 2:
+                dialogue.innerHTML = "Расследование сложное. Нам нужно больше улик.";
+                break;
+            case 3:
+                dialogue.innerHTML = "Наш напарник… имеет свои нюансы. Но мы справимся.";
+                break;
+            default:
+                dialogue.innerHTML = "Привет. Какой у тебя вопрос?";
+        }
+    }
+</script>
+
+</body>
+</html>

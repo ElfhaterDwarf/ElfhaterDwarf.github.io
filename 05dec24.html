@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лоботомия</title>
+    <style>
+        body img{
+            width: 1000px;
+            height: 800px;
+        }
+        body{
+            background-image: url(slonizmha.png);
+            color:green;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 55px;
+            color:pink
+            
+        }
+        h1{
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: small;
+        }
+        h2{
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 35px;
+            color:yellowgreen;
+            font-weight: bolder;
+        }
+        h4{
+            font-size: 65px;
+            color: rgb(229, 255, 0);
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        }
+        h3{
+            font-size: 85px;
+            color: rgb(255, 0, 0);
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        }
+        h4{
+            color: crimson;
+            font-size: 25px;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html"> <h2>СЛОН ИЗ МХА </h2> </a> <br>
+</body>
+<script>
+let money = 123435;
+let gramms = 876452;
+let seconds = 503826;
+let rubls = 12.78;
+
+tonns = 7;
+kgs = 34;
+grammchiki = 15;
+
+sutok = 15;
+chasov = 7;
+minut = 43;
+secund = 5;
+
+document.write('У вас со счёта списали '+ (Math.floor(money / 100)) + ' ' + 'рублей ' + (money % 100) + ' ' + 'копеек' + '<br>');
+
+document.write('У вас в мешочке '+ (Math.floor(gramms / 1000)) + ' ' + 'килограмм ' + (gramms % 1000) + ' ' + 'грамм' + '<br>');
+
+document.write('Вам осталось жить '+ (Math.floor(seconds / 3600)) + 'часов ' + (Math.floor((seconds/60)%60)) + 'минут ' + (Math.floor(seconds%60)) + 'секунд' + '<br>');
+
+document.write('Ваши 12.78'  + ' ' + 'рублей' +  ' ' + 'превратились в ' + (rubls*100) + " " + 'копеек' + '<br>');
+
+document.write('Ваши ' + tonns + " " + 'тонн ' + kgs + ' ' + 'килограмм ' + grammchiki + ' ' + 'грамм ' + 'превратились в ' + ((tonns * 1000) + (kgs * 100) + grammchiki) + ' грамм' + '<br>');
+
+document.write(( ((((sutok * 24 + chasov)*60) + minut) * 60) + secund) + ' ' + 'секунд' + '<br>');
+    </script>
+</html>
