@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лоботомия</title>
+    <style>
+        body img{
+            width: 1000px;
+            height: 800px;
+        }
+        body{
+            background-image: url(slonizmha.png);
+            color:green;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 55px;
+            color:pink
+            
+        }
+        h1{
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: small;
+        }
+        h2{
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 35px;
+            color:yellowgreen;
+            font-weight: bolder;
+        }
+        h4{
+            font-size: 65px;
+            color: rgb(229, 255, 0);
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        }
+        h3{
+            font-size: 85px;
+            color: rgb(255, 0, 0);
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        }
+        h4{
+            color: crimson;
+            font-size: 25px;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html"> <h2>СЛОН ИЗ МХА </h2> </a> <br>
+</body>
+<script>
+let c1 = 3;
+let r1 = 3;
+let c2 = 2;
+let r2 = 3;
+if( r1 == r2 || c1 == c2) {
+document.write("Ладья смогла дойти" + "<br>" + "<br>")
+}
+else{
+    document.write("Ладья не справилась с управлением" + "<br>" + "<br>")
+}
+let z1 = 2;
+let x1 = 2;
+let z2 = 1;
+let x2 = 1;
+if(Math.abs(z1 - z2)==Math.abs(x1 - x2)) {
+    document.write("Слон смог дойти" + "<br>" + "<br>")
+}
+else{
+    document.write("Слона перекосило, он не дошёл" + "<br>" + "<br>")
+}
+
+let v1 = 1;
+let b1 = 1;
+let v2 = 2;
+let b2 = 3;
+if(Math.abs(v1 - v2) == 1 && Math.abs(b1 - b2) == 2 || Math.abs(v1 - v2) == 2 && Math.abs(b1 - b2) == 1) {
+    document.write("Конь смог дойти" + "<br>" + "<br>")
+}
+else{
+    document.write("Коня угнали цыгане, он не дошёл" + "<br>" + "<br>")
+}
+    </script>
+</html>
