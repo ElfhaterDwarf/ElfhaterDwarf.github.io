@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Драматический Симулятор Мистера Инвалида</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #simulator {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div id="simulator">
+        <h1>Биопроблемный Симулятор Мистера Двачевского</h1>
+        <p id="story">Вы стоите на пешеходном переходе, когда вдруг слышите звук approaching женщины. Что сделать?</p>
+        <button onclick="choose('помочь')">Найти фембойчика</button>
+        <button onclick="choose('спасение')">Постараться спастись</button>
+        <button onclick="choose('прятаться')">Притвориться нормисом</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        let stage = 0;
+
+        function choose(option) {
+            if (stage === 0) {
+                if (option === 'помочь') {
+                    storyText("Вы решаете найти себе сочного фембойчика, но женщина настигает вас быстрее. Вам нужно выбрать, как поступить дальше.", 1);
+                } else if (option === 'спасение') {
+                    storyText("Вы решаете спастись, но улица оказывается переполненной. Мистер свин, тяните карту:", 1);
+                } else if (option === 'прятаться') {
+                    storyText("Вы окунулись в лужу, сняли с головы бумажный пакет, и притворились нормисом. Женщина стоит и смотрит на вас", 1);
+                }
+            } else if (stage === 1) {
+                if (option === 'помочь') {
+                    storyText("Вы находите себе сочного фембойчика, но женщина настигла вас обоих. Что будете делать?", 2);
+                } else if (option === 'спасение') {
+                    storyText("Вы заходите в бар 'Original pidors' в надежде спастись. Женщина заходит вслед за вами. Что будете делать?" , 2);
+                } else if (option === 'прятаться') {
+                    storyText("Вы успешно замаскировались, но она подошла к вам и протянула вам руку. Сейчас хоечка вымоется из вашей крови. Нужно что-то делать.", 2);
+                }
+            } else if (stage === 2) {
+                if (option === 'помочь') {
+                    displayResult("Ваша настойчивость притянула к вам всех фембойчиков района, и вы собрали себе целый гарем. HAPPY ENDING");
+                } else if (option === 'спасение') {
+                    displayResult("Вы напились в баре, а позже умерли в канаве где-то под Саратовым. Женщина вас так и не нашла. TRUE ENDING");
+                } else if (option === 'прятаться') {
+                    displayResult("Быть нормисом оказалось слишком сложно для вас, хоечка начала покидать ваше тело, и вы бы совершили харакири с помощью пробки, оставшейся после игры в танки, но женщина оказалась быстрее. Вы стали натуралом. BAD ENDING");
+                }
+            }
+        }
+
+        function storyText(text, nextStage) {
+            document.getElementById("story").innerText = text;
+            stage = nextStage;
+            document.getElementById("result").innerText = "";
+        }
+
+        function displayResult(finalMessage) {
+            document.getElementById("result").innerText = finalMessage;
+            document.getElementById("story").innerText = "Игра окончена. Перезагрузитесь, чтобы начать заново.";
+            stage = 3; // Заменяем текущую стадию, чтобы не вернуть к выбору
+        }
+    </script>
+</body>
+</html>
