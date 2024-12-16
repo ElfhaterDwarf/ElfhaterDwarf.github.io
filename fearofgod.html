@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квест: По следам войны</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            line-height: 1.5;
+        }
+        h1 {
+            text-align: center;
+            color: #800000;
+        }
+        .option {
+            margin: 15px 0;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #story {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Квест: По следам войны</h1>
+    <div id="story">
+        <p>Вы находитесь на опустошенном поле боя, окруженном смертью и страданиями. Каждая трава напоминает о потерянных жизнях. Что вы хотите сделать?</p>
+    </div>
+    <div class="option">
+        <button onclick="nextStep('explore')">Исследовать поле</button>
+        <button onclick="nextStep('seek_help')">Искать помощь</button>
+        <button onclick="nextStep('retreat')">Отступить в деревню</button>
+    </div>
+
+    <script>
+        function nextStep(action) {
+            const storyDiv = document.getElementById('story');
+
+            if (action === 'explore') {
+                storyDiv.innerHTML = `<p>Вы исследуете поле и находите заброшенные доспехи, пропитанные кровью. Внезапно, вы слышите стоны раненых солдат. Вы хотите помочь им?</p>
+                    <div class="option">
+                        <button onclick="nextStep('help')">Помочь солдатам</button>
+                        <button onclick="nextStep('leave')">Пройти мимо</button>
+                    </div>`;
+            } else if (action === 'seek_help') {
+                storyDiv.innerHTML = `<p>Вы пытаетесь найти людей, чтобы собрать помощь. Но деревня опустела, и вы слышите лишь эхо страданий. Куда вы теперь пойдёте?</p>
+                    <div class="option">
+                        <button onclick="nextStep('refuge')">Спрятаться</button>
+                        <button onclick="nextStep('return')">Вернуться на поле боя</button>
+                    </div>`;
+            } else if (action === 'retreat') {
+                storyDiv.innerHTML = `<p>Вы отступаете в деревню, но она тоже разрушена. Жители подавлены, и у них нет сил. Вы чувствуете вес утрат. Что делать дальше?</p>
+                    <div class="option">
+                        <button onclick="nextStep('comfort')">Утешить остальных</button>
+                        <button onclick="nextStep('scavenge')">Искать припасы</button>
+                    </div>`;
+            } else if (action === 'help') {
+                storyDiv.innerHTML = `<p>Вы помогаете солдатам, но многие из них не выживают. Вы чувствуете тяжесть на сердце, но ваш поступок вдохновляет других. Вы все еще на поле боя.</p>
+                    <p>Здесь заканчивается ваша история.</p>`;
+            } else if (action === 'leave') {
+                storyDiv.innerHTML = `<p>Вы решаете пройти мимо. Но звук страданий преследует вас. Вы понимаете, что это ваше бремя. Вы покидаете место страданий, но их память останется с вами.</p>
+                    <p>Здесь заканчивается ваша история.</p>`;
+            } else if (action === 'refuge') {
+                storyDiv.innerHTML = `<p>Вы находите укрытие и молитесь о мире. Ваша душа полна тревог. Возможно, там, где есть тишина, вы найдёте свой покой.</p>
+                    <p>Здесь заканчивается ваша история.</p>`;
+            } else if (action === 'return') {
+                storyDiv.innerHTML = `<p>Вы решаете вернуться на поле сражения, несмотря на страх. Надежда на победу исчезает, но вы боретесь за каждого.</p>
+                    <p>Здесь заканчивается ваша история.</p>`;
+            } else if (action === 'comfort') {
+                storyDiv.innerHTML = `<p>Вы утешаете оставшихся, делитесь воспоминаниями. Вы соединяетесь с их горем и надеждой. Возможно, вместе вы сможете восстановить то, что было потеряно.</p>
+                    <p>Здесь заканчивается ваша история.</p>`;
+            } else if (action === 'scavenge') {
+                storyDiv.innerHTML = `<p>Вы исследуете деревню в поисках еды. Исчезнувшие души напоминают вам о боли и страданиях. Найденные запасы делают ваш путь немного легче, но вы всё равно несёте тяжесть прошлого.</p>
+                    <p>Здесь заканчивается ваша история.</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
